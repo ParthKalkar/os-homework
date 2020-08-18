@@ -1,0 +1,46 @@
+    1  ls
+    2  git
+    3  ls
+    4  cd /
+    5  ls
+    6  cd home/
+    7  ls
+    8  cd erik_phillander/
+    9  ls
+   10  git clone https://github.com/ParthKalkar/os_week1
+   11  ls
+   12  cd os_week1/
+   13  ls
+   14  touch new_file.txt
+   15  git commit -m 'Just create new file'
+   16  git config --global user.email "Parthkalkar111@gmail.com"
+   17  git config --global user.name "ParthKalkar"
+   18  git commit -m 'Just create new file'
+   19  git add .
+   20  git commit -m 'Just create new file'
+   21  git push
+   22  ls
+   23  cd ..
+   24  ls
+   25  ~/
+   26  mkdir ~/week1
+   27  ls
+   28  cd week1/
+   29  ls
+   30  ls /usr/bin
+   31  ls /usr/bin | grep gcc
+   32  sudo apt install gcc
+   33  ls
+   34  ls /usr/bin | grep gcc
+   35  ls /usr/bin -r | grep gcc
+   36  ls /usr/bin -r | grep gcc > ex1.txt
+   37  cat ex1.txt 
+   38  ls
+   39  nano
+   40  nano filename.txt
+   41  ls
+   42  cat filename.txt 
+   43  pwd
+   44  ls
+   45  "history>ex2.txt"
+   46  history > ex2.txt
