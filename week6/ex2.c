@@ -1,69 +1,102 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 
-
-void swap(int* first, int* second) { //swapping
-	int temp;
-	temp = *first;
-	*first = *second;
-	*second = temp;
+void swap(int *a, int *b){
+	int temp = *a;
+    	*a = *b;
+    	*b = temp;
 }
 
-int main() {
-	int N, arrive[20], burst[20]; //storing data
-	int index[20];
-	printf("Enter the total amount of processes (up to 20): "); //getting data
-	scanf_s("%d", &N);
 
-	printf("\nEnter Process Arrival Time\n");
-	for (int i = 0; i < N; i++) {
-		index[i] = i + 1;
-		printf("P[%d]: ", i + 1);
-		scanf_s("%d", &arrive[i]);
+int main() {   
+	
+	// Pointers to arrays of arrival time (AT) and burst time (BT) of each process
+	int *at, *bt;
+	// Number of processes 
+	int size;
+	
+	
+	printf("Enter number of processes = ");
+	scanf("%d", &size);
+     
+	at = malloc(size * sizeof(int));
+	bt = malloc(size * sizeof(int));
+     	
+     	// Put arrival and burst time for each process
+	for(int i = 0; i < size; i++) {
+		printf("Enter arrival time of process P[%d] = ", i + 1);
+		scanf("%d", &at[i]);
+		
+		printf("Enter burst time of process P[%d] = ", i + 1);
+		scanf("%d", &bt[i]);
 	}
-
-	printf("\nEnter Process Burst Time\n");
-	for (int i = 0; i < N; i++) {
-		printf("P[%d]: ", i + 1);
-		scanf_s("%d", &burst[i]);
-	}
-
-	for (int i = 0; i < N; i++) { //arrange according to the arrival time
-		for (int j = 0; j < N - 1; j++) {
-			if (arrive[j] > arrive[j + 1]) {
-				swap(&arrive[j], &arrive[j + 1]);
-				swap(&burst[j], &burst[j + 1]);
-				swap(&index[j], &index[j + 1]);
+	
+	for (int i = 0; i < size - 1; i++) {
+		for (int j = 0; j < size - i - 1; j++) {
+			if (at[j] > at[j + 1]) {
+				swap (&at[j], &at[j + 1]);
+				swap (&bt[j], &bt[j + 1]);
+			}
+			
+			if (at[j] == at[j + 1]) {
+				if (bt[j] > bt[j + 1]) {
+					swap (&at[j], &at[j + 1]);
+					swap (&bt[j], &bt[j + 1]);
+				}
 			}
 		}
 	}
-
-	int wait[20]; //count waiting from the very beginning
-	wait[0] = arrive[0]; 
-	double avWait = 0;
-	for (int i = 1; i < N; i++) { //we wait either for arriving or for the previous process to be done
-		wait[i] = wait[i - 1] + burst[i - 1] > arrive[i] ? wait[i - 1] + burst[i - 1] : burst[i - 1];
-		avWait = avWait + wait[i] - arrive[i];
+	
+	// Arrays for completion time (CT), turn around time (TAT) and Waiting time (WT)
+	int ct[size], tat[size], wt[size];
+	// Average turnaround time (ATT) and average waiting time (AWT)
+	float att, awt;
+	// Total turnaround time and total waiting time, whey will be used to find ATT and AWT respectively
+	float total_tat = 0, total_wt = 0;
+	
+	
+	// Completion time equals to its BT + CT of previous process
+	ct[0] = at[0] + bt[0];
+	for (int i = 1; i < size; i++) {
+		ct[i] = ct[i - 1] + bt[i];
 	}
-	avWait = avWait / N;
-
-	int turnAround[20];
-	double avTurnAround = 0;
-	for (int i = 0; i < N; i++) { //calculating TunrAround time
-		turnAround[i] = wait[i] + burst[i] - arrive[0];
-		avTurnAround = avTurnAround + turnAround[i];
+	
+	
+	// For each process turnaround time equals to its CT minus its AT
+	// total_tat is sum of TAT of each process
+	for (int i = 0; i < size; i++) {
+		tat[i] = ct[i] - at[i];
+		total_tat += tat[i];
 	}
-	avTurnAround = avTurnAround / N;
-
-	printf("\nProcess\t\tArrival Time\tWaiting Time\tBurst Time\tTurnaroudTime"); //printing everything
-	for (int i = 0; i < N; i++) {
-		printf("\nP[%d]\t\t%d\t\t%d\t\t%d\t\t%d", index[i], arrive[i], wait[i] - arrive[i], burst[i], turnAround[i]); //the time of waiting here starts from arriving point
+	
+	
+	// For each process waiting time equals to its TAT minus its BT 
+	// Waiting time for first process is 0
+	// total_wt is sum of WT of each process
+	wt[0] = 0;
+	for (int i = 1; i < size; i++) {
+		wt[i] = tat[i] - bt[i];
+		total_wt += wt[i];
 	}
-
-	printf("\nCompletion Time: %d", turnAround[N - 1] + arrive[N - 1]);
-	printf("\nAverage Waiting Time: %f", avWait);
-	printf("\nAverage Turnaround Time: %f", avTurnAround);
-
-	return 0;
+	
+	// Output result:	
+	printf("#P\tAT\tBT\tCT\tTAT\tWT\n");
+	for (int i = 0; i < size; i++) {
+		// Number of process
+		printf("%d\t", (i + 1));
+		// Its AT
+		printf("%d\t", at[i]);
+		// Its BT
+		printf("%d\t", bt[i]);
+		// Its CT
+		printf("%d\t", ct[i]);
+		// Its TAT
+		printf("%d\t", tat[i]);
+		// Its WT
+		printf("%d\n", wt[i]);
+	}
+	
+	// Output average TAT and WT by dividing total_tat and total_wt by number of processes
+	printf("Average Turnaround time = %f \n", total_tat / (float)size);
+	printf("Average Waiting time = %f \n", total_wt / (float)size);
 }
