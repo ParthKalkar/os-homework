@@ -1,0 +1,6 @@
+Traced all links to file.txt 
+../week01/file.txt
+../week10/_ex2.txt
+
+Created file.txt in week01 directory - linked it to the _ex2.txt in week10 directory
+Found i-node of file.txt using 'ls -i file.txt'
