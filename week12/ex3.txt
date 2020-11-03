@@ -1,0 +1,31 @@
+fileA - 11.9 MB
+
+Default:
+real	0m0,040s
+user	0m0,012s
+sys	    0m0,029s
+
+Bufsize = 50:
+real	0m0,588s
+user	0m0,092s
+sys	    0m0,421s
+
+
+Bufsize = 500:
+real	0m0,099s
+user	0m0,021s
+sys 	0m0,048s
+
+
+Default buffer-size, O_Sync:
+real	3m19,466s
+user	0m0,077s
+sys	    0m1,388s
+
+
+1. These results show that having a small buffer results in a frequent I/O thus decreases the efficiency of the performance.
+
+2. For small files performance change might be negligible and can be ignored.
+
+3. O_SYNC results into big number of disk operations since it provides file integrity:
+     "write operations will flush data and all associated metadata to the underlying hardware"
