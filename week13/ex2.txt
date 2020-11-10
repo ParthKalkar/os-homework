@@ -1,0 +1,14 @@
+1. Avoidance: The strategy to avoid creating a deadlock or getting into it. Done by Banker's Algorithm.
+
+2. Prevention: Prevent the deadlock by eleminating any of the four conditions: 
+	a. Mutual Exclusion
+	b. Hold and Wait
+	c. No preemption
+	d. Circular wait
+
+3. Recovery: It is done through killing the process and resource preemption.
+
+This can be explained in details by the three basic approaches:
+	a.Inform the system operator, and allow him/her to take manual intervention
+    	b.Terminate one or more processes involved in the deadlock
+	c. Preempt resources
